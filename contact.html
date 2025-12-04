@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="logo">Elden Ring<br />API</div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="classes.html">Classes</a></li>
+          <li><a href="bosses.html">Bosses</a></li>
+          <li><a href="npcs.html">NPCs</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </nav>
+    </header>
+    <h1>Contact Us</h1>
+    <p>Your message matters to us. We will respond in less than a week.</p>
+    <section>
+      <form method="GET" action="simpleForm.html">
+        <label for="fullname">Full Name:</label><br />
+        <input type="text" id="fullname" name="fullname" required /><br /><br />
+
+        <label for="email">Email Address:</label><br />
+        <input type="email" id="email" name="email" required /><br /><br />
+
+        <label for="phone">Phone Number:</label><br />
+        <input type="text" id="phone" name="phone" /><br /><br />
+
+        <p>Preferred method of contact:</p>
+
+        <label>
+          <input type="radio" name="contact" value="email" /> Email </label
+        ><br />
+
+        <label>
+          <input type="radio" name="contact" value="phone" /> Phone </label
+        ><br /><br />
+
+        <label for="comment">Comments:</label><br />
+        <textarea id="comment" name="comment"></textarea><br /><br />
+
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+    <footer>Patrick Doxie and Devin Kruse INFO i210 2025</footer>
+  </body>
+</html>
