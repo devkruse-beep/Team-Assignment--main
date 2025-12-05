@@ -141,3 +141,138 @@ const npcList = document.getElementById('npc-list');
         // Call the fetch function when the page loads
         fetchNPCs()
         
+const firebaseConfig = {
+  apiKey: "AIzaSyBPKaCoFsfC5h7DRrH9xwSdONusfMe7_qw",
+  authDomain: "elden-ring-lore-b2a75.firebaseapp.com",
+  databaseURL: "https://elden-ring-lore-b2a75-default-rtdb.firebaseio.com",
+  projectId: "elden-ring-lore-b2a75",
+  storageBucket: "elden-ring-lore-b2a75.firebasestorage.app",
+  messagingSenderId: "964511506360",
+  appId: "1:964511506360:web:80a008c95ddb872cd4394d",
+  measurementId: "G-N8ZYY2FNQW"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// The firebase.database() this gives us access to realtime database service.
+const database = firebase.database();
+
+// Here we creating a reference to 'notes' collection (or path) in our database.
+// Every notes we add or modify will go under this "notes" node.
+const noteRef = database.ref("notes");
+
+// 3. Get elements From the Page
+// get the container elements from the html where all the notes will be displayed dynamically
+const notesContainer = document.getElementById("notes-container");
+
+// get the input box where the user types a new notes.
+const noteInput = document.getElementById("note-input");
+
+// get the submit button that will trigger dding a new note when clicked
+const submitButton = document.getElementById("submit-button");
+
+// 1.) Create
+// add an event listener to handle click actions on submit button
+submitButton.addEventListener("click", () => {
+  // retrieve the text typed by the user in the input box.
+  const noteText = noteInput.value;
+
+  // If the user click on submit button with an empty or white space-only input field, do nothing
+  if (noteText.trim() === "") return;
+
+  // Push a new noteobject into the notes path in our realtime database
+  // The push() method returns a unique key for the new note.
+  noteRef.push({
+    text: noteText, //the actual note text
+    timestamp: Date.now(), //Save the current time (milisec from 1970)
+  });
+
+  // after adding the notes to firebase, clear the input box for the next note
+  noteInput.value = "";
+});
+
+// 2.) Read
+
+noteRef.on("child_added", (snapshot) => {
+  // Step 1: Extract ID and object
+  const noteId = snapshot.key;
+  const newNote = snapshot.val();
+  const notesElement = createNoteElement(noteId, newNote.text);
+  notesContainer.prepend(notesElement);
+});
+
+function createNoteElement(noteId, noteText) {
+  // Outer box
+  const noteElement = document.createElement("div");
+  noteElement.classList.add("note");
+  noteElement.setAttribute("data-id", noteId);
+
+  // text
+  const noteTextElement = document.createElement("span");
+  noteTextElement.textContent = noteText;
+  noteElement.appendChild(noteTextElement);
+  // delete
+  const deleteButton = document.createElement("button");
+  deleteButton.classList.add("delete-btn");
+  deleteButton.innerText = "Delete";
+  deleteButton.addEventListener("click", () => {
+    deleteNote(noteId);
+  });
+
+  noteElement.appendChild(deleteButton);
+  // Edit button
+  const editButton = document.createElement("button");
+  editButton.classList.add("edit-btn");
+  editButton.innerText = "Edit";
+  editButton.addEventListener("click", () => {
+    const currentText = noteElement.querySelector("span").innerText;
+    editNote(noteId, noteText);
+  });
+
+  noteElement.appendChild(editButton);
+
+  return noteElement;
+}
+
+function deleteNote(noteId) {
+  // create a reference to the specific note to be deleted
+  const specificNoteref = database.ref("notes/" + noteId);
+
+  // remove the note from the database
+  specificNoteref.remove();
+}
+
+noteRef.on("child_removed", (snapshot) => {
+  const noteId = snapshot.key;
+
+  const noteElement = document.querySelector(`div[data-id="${noteId}"]`);
+
+  if (noteElement) {
+    noteElement.remove();
+  }
+});
+
+function editNote(noteId, currentText) {
+  // prompt is a built in tool that forces a small popup window to appear
+  // We gives it two things
+  // 1] the question : "fix your typo:"(This tells the user what to do)
+  // 2] the default answer :currentText (this puts the old note in the box automatically)
+  const newText = prompt("Fix your typo:", currentText);
+
+  if (newText && newText.trim() !== "") {
+    const specificNoteRef = database.ref("notes/" + noteId);
+    specificNoteRef.update({
+      text: newText,
+    });
+  }
+}
+
+noteRef.on("child_changed", (snapshot) => {
+  const noteId = snapshot.key;
+  const updatedNote = snapshot.val();
+  const noteElement = document.querySelector(`div[data-id="${noteId}"]`);
+  // If it exists locate the <span> in side and update its displayed
+  if (noteElement)
+    noteElement.querySelector("span").innerText = updatedNote.text;
+});

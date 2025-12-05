@@ -283,3 +283,71 @@ footer{
 align-items: center;
 justify-content: center;
 }
+
+/* comments styles */
+#notes-container {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 10px;
+  background: rgb(68, 53, 53, .5);
+  border: #ccc solid 1px;
+  min-height: 100px;
+}
+
+.input-area {
+  display: flex;
+  max-width: 600px;
+  margin: 50px auto;
+}
+
+.note {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+#note-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#submit-button {
+  padding: 10px;
+  background: #0398e5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.note {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.note span {
+  flex-grow: 1;
+}
+
+.note button {
+  margin-left: 5px;
+  border: none;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background: #ffc107;
+  color: #fff;
+}
+
+.delete-btn {
+  background: #f43336;
+  color: #fff;
+}
